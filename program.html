@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Combat Strength Program</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0f0f0f;
+      color: #f0f0f0;
+      padding: 30px;
+      margin: 0;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      background: #1c1c1c;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+    }
+    h1, h2 {
+      text-align: center;
+      color: #00ffc3;
+    }
+    .form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+    input {
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      background: #2a2a2a;
+      color: #fff;
+    }
+    button {
+      background: #00ffc3;
+      color: #000;
+      padding: 12px 25px;
+      font-size: 18px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      display: block;
+      margin: 20px auto;
+      transition: 0.3s;
+    }
+    button:hover { background: #00c9a7; }
+    .output {
+      margin-top: 30px;
+      background: #2a2a2a;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    .day-block {
+      margin-bottom: 25px;
+      padding: 15px;
+      background: #333;
+      border-left: 4px solid #00ffc3;
+      border-radius: 6px;
+    }
+    .day-block h2 { color: #00ffc3; }
+    .exercise {
+      margin-left: 15px;
+      padding: 5px 0;
+    }
+    .highlight {
+      font-weight: bold;
+      color: #ffd700;
+    }
+    .summary {
+      margin-top: 40px;
+      padding: 20px;
+      background: #222;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Combat Athlete 5-Week Strength Program</h1>
+    <p>Enter your 1RMs (one-rep max) below:</p>
+    <div class="form">
+      <input type="number" id="deadlift" placeholder="Deadlift 1RM (kg)">
+      <input type="number" id="frontSquat" placeholder="Front Squat 1RM (kg)">
+      <input type="number" id="benchPress" placeholder="Bench Press 1RM (kg)">
+      <input type="number" id="chinups" placeholder="Weighted Chin-ups 1RM (kg)">
+      <input type="number" id="pushPress" placeholder="Push Press 1RM (kg)">
+      <input type="number" id="powerClean" placeholder="Power Clean 1RM (kg)">
+      <input type="number" id="boxSquat" placeholder="Box Squat 1RM (kg)">
+      <input type="number" id="dips" placeholder="Weighted Dips 1RM (kg)">
+    </div>
+    <button id="generateBtn">Generate Program</button>
+    <div id="output" class="output"></div>
+  </div>
+
+  <script>
+    document.getElementById("generateBtn").addEventListener("click", generateProgram);
+
+    function generateProgram() {
+      const weeks = [
+        { week: 1, min: 0.75, max: 0.80, reps: "4–5", sets: "4–5" },
+        { week: 2, min: 0.80, max: 0.85, reps: "3–4", sets: "4–5" },
+        { week: 3, min: 0.85, max: 0.90, reps: "3",   sets: "4–5" },
+        { week: 4, min: 0.87, max: 0.92, reps: "2",   sets: "4–5" },
+        { week: 5, min: 0.90, max: 0.95, reps: "1–2", sets: "3–4" },
+      ];
+
+      const lifts = {
+        Monday: [
+          { id: 'deadlift', name: 'Deadlift' },
+          { id: 'frontSquat', name: 'Front Squat' },
+          { id: 'chinups', name: 'Weighted Chin-ups' },
+          { name: 'Barbell Rows' },
+          { name: 'Hanging Leg Raises' },
+          { name: 'Neck Harness' },
+        ],
+        Tuesday: [
+          { name: '1 hr Combat' },
+          { name: 'Sprints' },
+          { name: 'Box Jumps' },
+          { name: 'Rope Climb' },
+        ],
+        Wednesday: [
+          { id: 'benchPress', name: 'Bench Press' },
+          { id: 'dips', name: 'Weighted Dips' },
+          { id: 'pushPress', name: 'Push Press' },
+          { name: 'L Raises' },
+          { name: 'Plank' },
+          { name: 'Bird Dog' },
+        ],
+        Thursday: [
+          { name: '1 hr Combat' },
+          { id: 'powerClean', name: 'Power Clean' },
+          { id: 'boxSquat', name: 'Box Squat' },
+          { name: 'Kneeling Box Jump' },
+          { name: 'Medicine Ball Slam' },
+         
+        ],
+        Friday: [
+          { name: 'Bulgarian Split Squats' },
+          { name: 'Single Leg RDL' },
+          { name: 'Landmine Twist' },
+          { name: 'Sandbag Lift' },
+          { name: 'Ab Wheel' },
+          { name: 'Tibialis Raise' },
+        ],
+        Saturday: [
+          { name: '1 hr Combat' },
+          { name: 'Farmer’s Carry' },
+          { name: 'Sled Push' },
+          { name: 'Rope Climb' },
+        ]
+      };
+
+      const conditioning = {
+        Tuesday: [
+          ["Jump rope 5 mins", "EMOM 12 min: 10 burpees + 10 KB swings"],
+          ["Run 400m x 4", "Bike 15s sprint / 45s rest x 6"],
+          ["Row 250m x 5", "Wall balls 15 reps EMOM 10"],
+          ["Box jump EMOM 8", "C2 Bike sprint 20s x 6"],
+          ["Shuttle runs 15s x 10", "Airdyne Tabata 4 min"]
+        ],
+        Thursday: [
+          ["Med ball slam x 15 + sled drag 20m", "4 rounds"],
+          ["Sled push x 15m + Battle ropes 30s", "EMOM 12"],
+          ["Bear crawl 20m + Sandbag clean x 10", "5 rounds"],
+          ["Farmer’s carry 40m + rope slam x 20", "3 rounds"],
+          ["Strongman medley: tire flips + sandbag carry + prowler push", "10min AMRAP"]
+        ],
+        Saturday: [
+          ["Assault bike intervals 20s/40s x 6", "Bodyweight circuit: Pullups + Squats + Situps (3 rounds)"],
+          ["Kettlebell swing x 20 + crawl 10m", "4 rounds"],
+          ["Box jump x 10 + burpees x 10", "EMOM 10"],
+          ["Rower sprint 100m + bear crawl 20m", "5 rounds"],
+          ["Partner med ball toss + sprint", "8 rounds"]
+        ]
+      };
+
+      const oneRMs = {
+        deadlift: parseFloat(document.getElementById("deadlift").value),
+        frontSquat: parseFloat(document.getElementById("frontSquat").value),
+        benchPress: parseFloat(document.getElementById("benchPress").value),
+        chinups: parseFloat(document.getElementById("chinups").value),
+        pushPress: parseFloat(document.getElementById("pushPress").value),
+        powerClean: parseFloat(document.getElementById("powerClean").value),
+        boxSquat: parseFloat(document.getElementById("boxSquat").value),
+        dips: parseFloat(document.getElementById("dips").value),
+      };
+
+      let outputHTML = "";
+
+      for (let i = 0; i < weeks.length; i++) {
+        const week = weeks[i];
+        outputHTML += `<h2>Week ${week.week}</h2>`;
+        for (let [day, exercises] of Object.entries(lifts)) {
+          outputHTML += `<div class="day-block"><h2>${day}</h2>`;
+          for (let ex of exercises) {
+            if (ex.id && oneRMs[ex.id]) {
+              let min = (oneRMs[ex.id] * week.min).toFixed(1);
+              let max = (oneRMs[ex.id] * week.max).toFixed(1);
+              outputHTML += `<div class="exercise">
+                ${ex.name}: <span class="highlight">${week.sets} sets × ${week.reps} reps</span> @ 
+                <span class="highlight">${min}–${max} kg</span>
+              </div>`;
+            } else if (!ex.name.includes('1 hr Combat')) {
+              outputHTML += `<div class="exercise">
+                ${ex.name}: <span class="highlight">3–4 sets × 10–15 reps</span>
+              </div>`;
+            }
+          }
+          if (conditioning[day]) {
+            const cond = conditioning[day][i];
+            if (cond) {
+              outputHTML += `<div class="exercise"><em>Conditioning:</em> <span class="highlight">${cond[0]}</span> + <span class="highlight">${cond[1]}</span></div>`;
+            }
+          }
+          outputHTML += `</div>`;
+        }
+      }
+
+      outputHTML += `<div class="summary">
+        <h2>Projected PRs After Week 5</h2>
+        <div><strong>Deadlift:</strong> 130 kg → <span class="highlight">140–145 kg</span></div>
+        <div><strong>Front Squat:</strong> 80 kg → <span class="highlight">90–95 kg</span></div>
+        <div><strong>Bench Press:</strong> 75 kg → <span class="highlight">85–87.5 kg</span></div>
+        <div><strong>Weighted Chin-ups:</strong> +30 kg → <span class="highlight">+37.5–40 kg</span></div>
+        <div><strong>Push Press:</strong> 65 kg → <span class="highlight">75–77.5 kg</span></div>
+        <div><strong>Power Clean:</strong> 80 kg → <span class="highlight">90–95 kg</span></div>
+        <div><strong>Box Squat:</strong> 180 kg → <span class="highlight">200–210 kg</span></div>
+        <div><strong>Weighted Dips:</strong> +40 kg → <span class="highlight">+52.5–55 kg</span></div>
+      </div>`;
+
+      document.getElementById("output").innerHTML = outputHTML;
+    }
+  </script>
+</body>
+</html>
